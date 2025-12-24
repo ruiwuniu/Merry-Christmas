@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>香港樹仁大學聖誕賀卡</title>
+    <title>香港樹仁大學聖誕賀卡 - 固定圖片版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+HK:wght@400;700&display=swap');
@@ -44,7 +44,7 @@
             perspective: 1200px;
         }
 
-        /* AI 壁爐容器 */
+        /* 壁爐容器 */
         .fireplace-container {
             position: relative;
             width: 90vw;
@@ -63,6 +63,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block; /* 默認顯示 */
         }
 
         /* 信封飛出 */
@@ -191,33 +192,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none;
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .loader {
-            text-align: center;
-            color: white;
-        }
-        .snowball {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 0 5px;
-            animation: bounce 0.6s infinite alternate;
-        }
-        .snowball:nth-child(2) { animation-delay: 0.2s; }
-        .snowball:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes bounce {
-            to { transform: translateY(-15px); }
+            display: block; /* 默認顯示 */
         }
 
         .greeting-content {
@@ -268,16 +243,11 @@
     <div class="room">
         <div class="flex flex-col items-center z-10 relative" style="top: -5vh;">
             <div class="fireplace-container">
-                <img id="fireplace-image" alt="Vintage Fireplace with Fire" style="display: none;">
-                <div id="fireplace-loader" class="loader absolute">
-                    <div class="snowball bg-orange-500"></div>
-                    <div class="snowball bg-orange-500"></div>
-                    <div class="snowball bg-orange-500"></div>
-                    <p class="mt-4 text-xs text-orange-300">正在點燃壁爐...</p>
-                </div>
+                <!-- 替換此處 src 為您的壁爐圖片網址 -->
+                <img id="fireplace-image" src="https://example.com/your-fireplace-image.jpg" alt="Luxurious Fireplace">
             </div>
             <button class="btn-start" id="btn-start">開啟聖誕賀禮</button>
-            <p id="loading-hint" class="text-white/50 text-xs mt-4 text-center px-4">AI 正在為您手繪獨特的聖誕卡片...</p>
+            <p id="loading-hint" class="text-white/50 text-xs mt-4 text-center px-4 italic">Merry Christmas from Braemar Hill</p>
         </div>
 
         <div class="envelope-wrapper" id="envelope-wrapper">
@@ -285,21 +255,14 @@
                 <div class="envelope-flap"></div>
                 
                 <div class="wax-seal" id="wax-seal">
-                    <img id="wax-seal-image" alt="HKSYU Wax Seal" style="display: none;">
-                    <div id="seal-loader" class="loader absolute inset-0 flex items-center justify-center">
-                        <div class="w-8 h-8 border-4 border-red-800 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
+                    <!-- 替換此處 src 為您的校徽火漆印圖片網址 -->
+                    <img id="wax-seal-image" src="https://example.com/your-wax-seal.png" alt="HKSYU Wax Seal">
                 </div>
 
                 <div class="card">
                     <div class="illustration-container">
-                        <div id="card-loader" class="loader">
-                            <div class="snowball"></div>
-                            <div class="snowball"></div>
-                            <div class="snowball"></div>
-                            <p class="mt-4 text-xs">正在繪製雪中維港...</p>
-                        </div>
-                        <img id="ai-card-image" alt="HKSYU Snow View Illustration">
+                        <!-- 替換此處 src 為您的卡片背景圖片網址 -->
+                        <img id="ai-card-image" src="https://example.com/your-card-background.jpg" alt="HKSYU Snow View">
                     </div>
 
                     <div class="greeting-content">
@@ -323,12 +286,7 @@
     </div>
 
     <script>
-        const apiKey = "";
-        
-        const fireplacePrompt = "A magnificent, opulent Baroque-style marble fireplace with a roaring fire. It is richly decorated with gilded carvings, a massive evergreen garland with red ribbons and baubles, antique brass candlesticks, and plush velvet stockings. The scene is warm and luxurious, rendered in a detailed, traditional oil painting style.";
-        const waxSealPrompt = "A close-up photograph of a round, dark red wax seal on an envelope. The seal is embossed with the official circular coat of arms logo of Hong Kong Shue Yan University (HKSYU). The wax has a realistic, aged texture.";
-        const cardImagePrompt = "A breathtaking children's book illustration from a viewpoint on Braemar Hill, looking down towards North Point and Victoria Harbour in Hong Kong. The entire scene is covered in thick snow. The city lights twinkle warmly, and traditional junk boats are in the snowy harbour. The style is whimsical and hand-painted with soft textures.";
-
+        // 雪花系統保持不變
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, snowflakes;
@@ -360,46 +318,11 @@
             requestAnimationFrame(drawSnow);
         }
 
-        async function generateImage(prompt, imgId, loaderId, retries = 0) {
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
-                        parameters: { sampleCount: 1 }
-                    })
-                });
-
-                if (!response.ok) throw new Error('API Error');
-
-                const result = await response.json();
-                const base64 = result.predictions[0].bytesBase64Encoded;
-                const imgElement = document.getElementById(imgId);
-                const loader = document.getElementById(loaderId);
-
-                imgElement.src = `data:image/png;base64,${base64}`;
-                imgElement.onload = () => {
-                    imgElement.style.display = 'block';
-                    if (loader) loader.style.display = 'none';
-                };
-            } catch (error) {
-                if (retries < 3) {
-                    const delay = Math.pow(2, retries) * 1000;
-                    setTimeout(() => generateImage(prompt, imgId, loaderId, retries + 1), delay);
-                } else {
-                    if (loaderId) document.getElementById(loaderId).innerHTML = "<p class='text-xs'>載入失敗</p>";
-                }
-            }
-        }
-
         const btnStart = document.getElementById('btn-start');
         const wrapper = document.getElementById('envelope-wrapper');
-        const loadingHint = document.getElementById('loading-hint');
 
         btnStart.addEventListener('click', () => {
             btnStart.classList.add('hidden');
-            loadingHint.classList.add('hidden');
             wrapper.classList.add('fly-out');
         });
 
@@ -412,20 +335,13 @@
                 setTimeout(() => {
                     wrapper.classList.remove('fly-out');
                     btnStart.classList.remove('hidden');
-                    loadingHint.classList.remove('hidden');
                 }, 800);
             }
         });
 
-        window.onload = async () => {
+        window.onload = () => {
             initSnow();
             drawSnow();
-            
-            generateImage(fireplacePrompt, 'fireplace-image', 'fireplace-loader');
-            generateImage(waxSealPrompt, 'wax-seal-image', 'seal-loader');
-            generateImage(cardImagePrompt, 'ai-card-image', 'card-loader');
-
-            loadingHint.innerText = "畫卷已繪就，請開啟祝福";
         };
         window.onresize = initSnow;
     </script>
