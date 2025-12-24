@@ -7,7 +7,7 @@
     <!-- 微信/社交平台分享元數據 (Open Graph Tags) -->
     <meta property="og:title" content="香港樹仁大學聖誕賀卡 - 來自 Dr. Richard Niu 的祝福">
     <meta property="og:description" content="從寶馬山俯瞰雪中維港，祝您聖誕快樂，平安喜樂。">
-    <meta property="og:image" content="card-bg.jpg"> <!-- 這裡建議使用完整網址，例如 https://用戶名.github.io/倉庫名/card-bg.jpg -->
+    <meta property="og:image" content="card-bg.jpg">
     <meta property="og:type" content="website">
 
     <title>香港樹仁大學聖誕賀卡 - 聖誕快樂</title>
@@ -51,7 +51,7 @@
             perspective: 1200px;
         }
 
-        /* 壁爐容器 */
+        /* 豪華壁爐容器 */
         .fireplace-container {
             position: relative;
             width: 90vw;
@@ -64,6 +64,7 @@
             overflow: hidden;
             border-radius: 8px 8px 0 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #1a0f0a; /* 備用底色 */
         }
 
         #fireplace-image {
@@ -71,6 +72,38 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            z-index: 1;
+        }
+
+        /* 火焰 Canvas */
+        #fire-canvas {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px; /* 火焰寬度 */
+            height: 180px; /* 火焰高度 */
+            z-index: 10;
+            pointer-events: none;
+            filter: blur(1px);
+        }
+
+        /* 火光氛圍暈影 */
+        .fire-glow {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.4) 0%, transparent 70%);
+            z-index: 5;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0.8; transform: translateX(-50%) scale(1.2); }
         }
 
         /* 信封飛出 */
@@ -94,7 +127,7 @@
         }
 
         .envelope-wrapper.fly-out {
-            transform: scale(1) translateY(-5vh) rotate(-3deg);
+            transform: scale(1) translateY(-16vh) rotate(-3deg);
             opacity: 1;
             pointer-events: auto;
         }
@@ -171,7 +204,7 @@
         }
 
         .open .card {
-            transform: translateY(-12vh) scale(1.1);
+            transform: translateY(-16vh) scale(1.1);
             width: 85vw;
             max-width: 360px;
             height: auto;
@@ -180,6 +213,7 @@
             margin-left: -42.5vw;
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
+
         @media (min-width: 425px) {
             .open .card { margin-left: -180px; }
         }
@@ -214,10 +248,13 @@
         }
 
         .title-cn {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Serif HK', serif;
+            font-weight: 700;
             color: var(--hksyu-red);
-            font-size: 1.6rem;
-            margin-bottom: 4px;
+            font-size: 2rem;
+            margin-bottom: 2px;
+            text-shadow: 1px 1px 2px rgba(196, 30, 58, 0.05);
+            letter-spacing: 0.1rem;
         }
         
         .greeting-text {
@@ -245,7 +282,6 @@
 </head>
 <body>
 
-    <!-- 微信預覽小技巧：在 body 開頭放置一張隱藏圖片，微信有時會抓取第一張圖作為縮略圖 -->
     <div style="display:none;"><img src="background.png" alt="preview"></div>
 
     <canvas id="snow-canvas"></canvas>
@@ -254,6 +290,9 @@
         <div class="flex flex-col items-center z-10 relative" style="top: -5vh;">
             <div class="fireplace-container">
                 <img id="fireplace-image" src="fireplace.png" alt="Luxurious Fireplace">
+                <!-- 動態火焰特效 -->
+                <canvas id="fire-canvas"></canvas>
+                <div class="fire-glow"></div>
             </div>
             <button class="btn-start" id="btn-start">開啟聖誕賀禮</button>
             <p id="loading-hint" class="text-white/50 text-xs mt-4 text-center px-4 italic">Merry Christmas from Braemar Hill</p>
@@ -274,7 +313,7 @@
 
                     <div class="greeting-content">
                         <h2 class="title-cn">聖誕快樂</h2>
-                        <p class="text-xs font-bold text-red-800 mb-2">Merry Christmas</p>
+                        <p class="text-xs font-bold text-red-800 mb-2" style="letter-spacing: 1px;">Merry Christmas</p>
                         <div class="greeting-text">
                             <p>從寶馬山俯瞰</p>
                             <p>雪中的維港與北角燈火</p>
@@ -293,18 +332,19 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, snowflakes;
+        // 雪花系統
+        const snowCanvas = document.getElementById('snow-canvas');
+        const sCtx = snowCanvas.getContext('2d');
+        let sw, sh, snowflakes;
 
         function initSnow() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
+            sw = window.innerWidth;
+            sh = window.innerHeight;
+            snowCanvas.width = sw;
+            snowCanvas.height = sh;
             snowflakes = Array.from({ length: 150 }, () => ({
-                x: Math.random() * width,
-                y: Math.random() * height,
+                x: Math.random() * sw,
+                y: Math.random() * sh,
                 radius: Math.random() * 2.5 + 0.5,
                 speed: Math.random() * 1.5 + 0.5,
                 opacity: Math.random() * 0.7 + 0.3
@@ -312,16 +352,78 @@
         }
 
         function drawSnow() {
-            ctx.clearRect(0, 0, width, height);
+            sCtx.clearRect(0, 0, sw, sh);
             snowflakes.forEach(flake => {
-                ctx.beginPath();
-                ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.fill();
+                sCtx.beginPath();
+                sCtx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+                sCtx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                sCtx.fill();
                 flake.y += flake.speed;
-                if (flake.y > height) flake.y = -10;
+                if (flake.y > sh) flake.y = -10;
             });
             requestAnimationFrame(drawSnow);
+        }
+
+        // 火焰特效系統
+        const fireCanvas = document.getElementById('fire-canvas');
+        const fCtx = fireCanvas.getContext('2d');
+        let particles = [];
+
+        function initFire() {
+            fireCanvas.width = 160;
+            fireCanvas.height = 180;
+        }
+
+        class FireParticle {
+            constructor() {
+                this.x = fireCanvas.width / 2 + (Math.random() - 0.5) * 40;
+                this.y = fireCanvas.height - 10;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = -Math.random() * 3 - 2;
+                this.life = Math.random() * 30 + 20;
+                this.maxLife = this.life;
+                this.size = Math.random() * 15 + 10;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                this.size *= 0.96;
+            }
+
+            draw() {
+                const ratio = this.life / this.maxLife;
+                const r = 255;
+                const g = Math.floor(200 * ratio);
+                const b = Math.floor(50 * ratio);
+                const a = ratio * 0.6;
+
+                fCtx.beginPath();
+                fCtx.globalCompositeOperation = 'lighter';
+                fCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+                fCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fCtx.fill();
+            }
+        }
+
+        function drawFire() {
+            fCtx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
+            
+            // 每一幀生成新粒子
+            if (particles.length < 60) {
+                for (let i = 0; i < 3; i++) {
+                    particles.push(new FireParticle());
+                }
+            }
+
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(drawFire);
         }
 
         const btnStart = document.getElementById('btn-start');
@@ -348,6 +450,8 @@
         window.onload = () => {
             initSnow();
             drawSnow();
+            initFire();
+            drawFire();
         };
         window.onresize = initSnow;
     </script>
