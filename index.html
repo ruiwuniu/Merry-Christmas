@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>香港樹仁大學聖誕賀卡 - 固定圖片版</title>
+    <title>香港樹仁大學聖誕賀卡 - GitHub 託管版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+HK:wght@400;700&display=swap');
@@ -63,7 +63,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block; /* 默認顯示 */
+            display: block;
         }
 
         /* 信封飛出 */
@@ -192,7 +192,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block; /* 默認顯示 */
+            display: block;
         }
 
         .greeting-content {
@@ -243,8 +243,8 @@
     <div class="room">
         <div class="flex flex-col items-center z-10 relative" style="top: -5vh;">
             <div class="fireplace-container">
-                <!-- 替換此處 src 為您的壁爐圖片網址 -->
-                <img id="fireplace-image" src="https://example.com/your-fireplace-image.jpg" alt="Luxurious Fireplace">
+                <!-- 修改建議：確保 GitHub 倉庫中有名為 fireplace.jpg 的文件 -->
+                <img id="fireplace-image" src="fireplace.png" alt="Luxurious Fireplace">
             </div>
             <button class="btn-start" id="btn-start">開啟聖誕賀禮</button>
             <p id="loading-hint" class="text-white/50 text-xs mt-4 text-center px-4 italic">Merry Christmas from Braemar Hill</p>
@@ -255,14 +255,14 @@
                 <div class="envelope-flap"></div>
                 
                 <div class="wax-seal" id="wax-seal">
-                    <!-- 替換此處 src 為您的校徽火漆印圖片網址 -->
-                    <img id="wax-seal-image" src="https://example.com/your-wax-seal.png" alt="HKSYU Wax Seal">
+                    <!-- 修改建議：確保 GitHub 倉庫中有名為 wax-seal.png 的文件 -->
+                    <img id="wax-seal-image" src="wax-seal.png" alt="HKSYU Wax Seal">
                 </div>
 
                 <div class="card">
                     <div class="illustration-container">
-                        <!-- 替換此處 src 為您的卡片背景圖片網址 -->
-                        <img id="ai-card-image" src="https://example.com/your-card-background.jpg" alt="HKSYU Snow View">
+                        <!-- 修改建議：確保 GitHub 倉庫中有名為 card-bg.jpg 的文件 -->
+                        <img id="ai-card-image" src="background.png" alt="HKSYU Snow View">
                     </div>
 
                     <div class="greeting-content">
@@ -286,7 +286,6 @@
     </div>
 
     <script>
-        // 雪花系統保持不變
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, snowflakes;
