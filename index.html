@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>香港樹仁大學聖誕賀卡 - GitHub 託管版</title>
+    
+    <!-- 微信/社交平台分享元數據 (Open Graph Tags) -->
+    <meta property="og:title" content="香港樹仁大學聖誕賀卡 - 來自 Dr. Richard Niu 的祝福">
+    <meta property="og:description" content="從寶馬山俯瞰雪中維港，祝您聖誕快樂，平安喜樂。">
+    <meta property="og:image" content="card-bg.jpg"> <!-- 這裡建議使用完整網址，例如 https://用戶名.github.io/倉庫名/card-bg.jpg -->
+    <meta property="og:type" content="website">
+
+    <title>香港樹仁大學聖誕賀卡 - 聖誕快樂</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+HK:wght@400;700&display=swap');
@@ -238,13 +245,15 @@
 </head>
 <body>
 
+    <!-- 微信預覽小技巧：在 body 開頭放置一張隱藏圖片，微信有時會抓取第一張圖作為縮略圖 -->
+    <div style="display:none;"><img src="card-bg.jpg" alt="preview"></div>
+
     <canvas id="snow-canvas"></canvas>
 
     <div class="room">
         <div class="flex flex-col items-center z-10 relative" style="top: -5vh;">
             <div class="fireplace-container">
-                <!-- 修改建議：確保 GitHub 倉庫中有名為 fireplace.jpg 的文件 -->
-                <img id="fireplace-image" src="fireplace.png" alt="Luxurious Fireplace">
+                <img id="fireplace-image" src="fireplace.jpg" alt="Luxurious Fireplace">
             </div>
             <button class="btn-start" id="btn-start">開啟聖誕賀禮</button>
             <p id="loading-hint" class="text-white/50 text-xs mt-4 text-center px-4 italic">Merry Christmas from Braemar Hill</p>
@@ -255,14 +264,12 @@
                 <div class="envelope-flap"></div>
                 
                 <div class="wax-seal" id="wax-seal">
-                    <!-- 修改建議：確保 GitHub 倉庫中有名為 wax-seal.png 的文件 -->
                     <img id="wax-seal-image" src="wax-seal.png" alt="HKSYU Wax Seal">
                 </div>
 
                 <div class="card">
                     <div class="illustration-container">
-                        <!-- 修改建議：確保 GitHub 倉庫中有名為 card-bg.jpg 的文件 -->
-                        <img id="ai-card-image" src="background.png" alt="HKSYU Snow View">
+                        <img id="ai-card-image" src="card-bg.jpg" alt="HKSYU Snow View">
                     </div>
 
                     <div class="greeting-content">
